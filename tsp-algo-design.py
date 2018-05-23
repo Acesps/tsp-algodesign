@@ -58,14 +58,49 @@ def tryit(G,n,nodes):
 	ans=[1,2,3,1]
 	distance = G.edge[1][2]['cost'] + G.edge[2][3]['cost'] + G.edge[3][1]['cost']
 	for i in range(4,len(nodes)+2):
-		minimum_triangle = n*1000
-		for j in range(0,len(ans)-1):
-			triangle = -G.edge[ans[j]][ans[j+1]]['cost'] + G.edge[i][ans[j+1]]['cost'] + G.edge[i][ans[j]]['cost'];
-			if(triangle < minimum_triangle):
-				minimum_triangle = triangle
-				k = j 
-		distance += minimum_triangle
-		ans.insert(k+1,i)	
+		minimum_triangle = n*1000 #cost of adding 
+		# for j in range(0,len(ans)-1):
+		# 	triangle = -G.edge[ans[j]][ans[j+1]]['cost'] + G.edge[i][ans[j+1]]['cost'] + G.edge[i][ans[j]]['cost'];
+		# 	if(triangle < minimum_triangle):
+		# 		minimum_triangle = triangle
+		# 		k = j 
+		# distance += minimum_triangle
+		# ans.insert(k+1,i)
+		newans = ans
+		for i1 in range(0,len(ans)-1):
+			for i2 in range(1,len(ans)):
+				if i1 == i2 :
+					continue
+				if(i1 + 1 = i2) or (i1 = i2 + 1 ):
+					triangle = -G.edge[ans[i1]][ans[i2]]['cost'] + G.edge[i][ans[i2]]['cost'] + G.edge[i][ans[i1]]['cost'];
+				 	if(triangle < minimum_triangle):
+				 		minimum_triangle = triangle
+				 		newans = ans
+				 		newans.insert(max(i2,i1),i)
+				elif i1 < i2:
+					cost = G.edge[ans[i1]][i] + G.edge[ans[i2]][i] - G.edge[ans[i1]][ans[i1+1]] -G.edge[ans[i2]][ans[i2-1]];
+					if cost > minimum_triangle:
+						continue
+					tempans=ans[:i1+1] + [i] + ans[i2:] #[1,2,3,..i1] + [i] + [i2,...,1]
+
+					for j in range(0,len(tempans)-1):
+						triangle = -G.edge[tempans[j]][tempans[j+1]]['cost'] + G.edge[ans[i1]][tempans[j]]['cost'] + G.edge[ans[i2]][tempans[j+1]]['cost'];
+				 		if(cost + triangle) < minimum_triangle:
+				 			minimum_triangle = cost + triangle;
+				 			newans = tempans[:j+1] + ans[i1+1:i2] + temp[j+1:]
+						triangle = -G.edge[tempans[j]][tempans[j+1]]['cost'] + G.edge[ans[i1]][tempans[j+1]]['cost'] + G.edge[ans[i2]][tempans[j]]['cost'];
+				 		if(cost + triangle) < minimum_triangle:
+				 			minimum_triangle = cost + triangle;
+				 			newans = tempans[:j+1] + ans[i2-1:i1:-1] + tempans[j+1:]
+				else:
+					ans.pop()
+					cost = G.edge[ans[i1]][i] + G.edge[ans[i2]][i] -G.edge[ans[i1]][i1-1] -G.edge[ans[i2]][(i2+1)%len(ans)]
+					if cost > minimum_triangle:
+						continue
+					tempans = ans[i1:i2+1] 
+					ans+=[1]
+
+		ans = newans
 	return distance, ans 
 #enabling interactive mode in pylab
 pylab.ion()                                 
@@ -86,11 +121,11 @@ nodes=[int(a) for a in range(2,n+1)]
 # print "hurray"
 # print count;
 # exit()
-g = [ [468, 479, 421, 475, 433, 412],
-	[479, 428, 409, 471, 403, 465],
-	[421, 409, 456, 425, 492, 486],
-	[475, 471, 425, 404, 490, 420]]
-	#[433, 403, 492, 490, 481, 488] ]
+# g = [ [468, 479, 421, 475, 433, 412],
+# 	[479, 428, 409, 471, 403, 465],
+# 	[421, 409, 456, 425, 492, 486],
+# 	[475, 471, 425, 404, 490, 420]],
+# 	#[433, 403, 492, 490, 481, 488] ]
 
 G.add_nodes_from(nodes)
 G.add_nodes_from([1])
@@ -101,8 +136,8 @@ for i in range(1,n+1):
     	weights.append(weight)
     for j in range(i,n+1):
         weight =randint(400,500)
-        G.add_edge(i,j,{'cost' : g[i-1][j-1]}) #weight })
-        weights.append(g[i-1][j-1])
+        G.add_edge(i,j,{'cost' : weight })#g[i-1][j-1]})
+        weights.append(weight)#g[i-1][j-1])
     print weights
 graph_pos=nx.circular_layout(G)
 visualize(G,graph_pos)
