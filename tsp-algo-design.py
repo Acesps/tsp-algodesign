@@ -25,10 +25,11 @@ def travllingSalesmanProblem(G,n,nodes):
     # store minimum weight Hamiltonian Cycle.
     min_path = n*1000;
     ans = []
+    count = 0 
     while(len(nodes) > 0):
         # store current Path weight(cost)
         current_pathweight = 0;
-         
+        count +=1
         #compute current path weight
         current_pathweight += G.edge[nodes[0]][1]['cost'];
         for i in  range(0,len(nodes)-1):
@@ -48,6 +49,7 @@ def travllingSalesmanProblem(G,n,nodes):
         	#print nodes 
         nodes = next_permutation(nodes)
     print ans;
+    print count
     return min_path,ans[0];
 
  
@@ -229,18 +231,16 @@ nodes=[int(a) for a in range(2,n+1)]
 # #print "hurray"
 # #print count;
 # exit()
-g = [[439, 478, 428, 434, 441, 464, 438, 420, 439, 448, 423, 429],
-	[478, 498, 439, 433, 467, 457, 426, 491, 491, 483, 460, 415],
-	[428, 439, 447, 479, 489, 474, 439, 483, 488, 458, 440, 450],
-	[434, 433, 479, 494, 458, 443, 474, 464, 445, 415, 403, 495],
-	[441, 467, 489, 458, 457, 463, 402, 472, 421, 427, 448, 465],
-	[464, 457, 474, 443, 463, 413, 402, 431, 426, 423, 456, 440],
-	[438, 426, 439, 474, 402, 402, 459, 455, 483, 495, 488, 472],
-	[420, 491, 483, 464, 472, 431, 455, 431, 424, 488, 406, 496],
-	[439, 491, 488, 445, 421, 426, 483, 424, 457, 416, 401, 429],
-	[448, 483, 458, 415, 427, 423, 495, 488, 416, 488, 478, 436],
-	[423, 460, 440, 403, 448, 456, 488, 406, 401, 478, 437, 444],
-	[429, 415, 450, 495, 465, 440, 472, 496, 429, 436, 444, 424]]
+g = [[0, 475, 332, 392, 319, 326, 485, 368, 354, 305],
+	[475, 0, 349, 340, 454, 310, 458, 429, 387, 378],
+	[332, 349, 0, 320, 407, 367, 386, 461, 342, 389],
+	[392, 340, 320, 0, 325, 256, 431, 428, 446, 477],
+	[319, 454, 407, 325, 0, 388, 482, 258, 276, 346],
+	[326, 310, 367, 256, 388, 0, 286, 343, 258, 412],
+	[485, 458, 386, 431, 482, 286, 0, 418, 403, 268],
+	[368, 429, 461, 428, 258, 343, 418, 0, 467, 274],
+	[354, 387, 342, 446, 276, 258, 403, 467, 0, 465],
+	[305, 378, 389, 477, 346, 412, 268, 274, 465, 0]]
 
 G.add_nodes_from(nodes)
 G.add_nodes_from([1])
@@ -249,7 +249,8 @@ for i in range(1,n+1):
     for j in range(1,i):
     	weight = G.edge[i][j]['cost']
     	weights.append(weight)
-    for j in range(i,n+1):
+    weights.append(0)
+    for j in range(i+1,n+1):
         weight = g[i-1][j-1] #randint(400,500) #
         G.add_edge(i,j,{'cost' : weight })
         weights.append(weight)
