@@ -162,7 +162,8 @@ def tryit(G,n,nodes):
 					 				list_newans.append(copy.deepcopy(newans[::-1]))
 					 			#print "running triangle 3"
 					 			#print i1,i2,tempans,ans,list_newans
-
+				###############################################################################################change this condition all the ids should be breakable...
+			
 						if (i1!= 0 and i2 < len(ans)-2): #if i2 = len-2 there is no point between i1 & i2
 					 		cost = G.edge[ans[i1]][i]['cost'] + G.edge[ans[i2]][i]['cost'] -G.edge[ans[i1]][ans[i1-1]]['cost'] -G.edge[ans[i2]][ans[i2+1]]['cost']
 							if cost > minimum_triangle:
